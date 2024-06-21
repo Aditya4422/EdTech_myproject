@@ -1,0 +1,18 @@
+npm init -y
+npm i express
+npm i nodemon
+npm i env
+npm i mongoose
+npm i cookie-parser
+npm i jsonwebtoken
+npm i nodemailer
+npm i otp-generator
+npm i bcrypt
+npm i razorpay
+
+STEP1 : you have to write  the database.js for connection with mongodb database
+
+STEP2 : then you have to write the .js models in model folder and then export him
+
+STEP3 :  
+
