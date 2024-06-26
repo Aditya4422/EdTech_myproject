@@ -1,25 +1,25 @@
 const RatingAndReview = require('../models/RatingAndReview');
 const Course = require('../models/Course');
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 
 // create reting and review
 exports.createRating = async (req, res) => {
     try{
         // get userId
         const userId = req.user.id;
-
+        
         // fetch the course id , rating and review
         const {courseId, rating, review} = req.body;
 
         // check if user is enrolled or not
         const courseDetails = await Course.findOne({_id: courseId, studentsEnrolled: {$elemMatch: {$eq: userId}}});
-
         if(!courseDetails){
             return res.status(404).json({
                 success: false,
                 message: 'User not enrolled in the course',
             });
         }
+
         // check if the user already reviewed the course
         const alreadyReviewed = await RatingAndReview.findOne({user:userId, course: courseId});
         if(alreadyReviewed){
@@ -53,9 +53,10 @@ exports.createRating = async (req, res) => {
         });
     }
     catch(error){
+        console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'Something wrong happened while givin rating and reviews',
+            message: 'Internal Server error while givin rating and reviews',
         });
     }
 };
@@ -97,7 +98,7 @@ exports.getAverageRating = async(req, res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'Something wrong happened while calculating the average rating',
+            message: 'Internal server error while calculating the average rating',
         });
     }
 }
@@ -109,7 +110,7 @@ exports.getAllRating = async (req, res) => {
                                                         .sort({rating: 'desc'})
                                                         .populate({
                                                             path: "user",
-                                                            select: "firstName lastName email image",
+                                                            select: "firstName lastName email image", // select the fields only which we want to populate
                                                         })
                                                         .populate({
                                                             path: "course",
@@ -125,9 +126,10 @@ exports.getAllRating = async (req, res) => {
                                                 
     }
     catch(error){
+        console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'Somthing wrong happened while fetching all the rating and reviews',
+            message: 'Internal Server error while fetching all the rating and reviews',
         });
     }
 };
