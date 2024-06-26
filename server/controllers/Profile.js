@@ -1,11 +1,15 @@
+const { default: mongoose } = require('mongoose');
 const Profile = require('../models/Profile');
 const User = require('../models/User');
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
+const Course = require('../models/Course');
+const {convertSecondsToDurations} = require("../utils/secToDuration");
+const CourseProgress = require('../models/CourseProgress');
 
 exports.updateProfile = async(req, res) => {
     try{
         // fetch data
-        const {dateOfBirth="", about="", contactNumber, gender} = req.body;
+        const {firstName="", lastName="", dateOfBirth="", about="", contactNumber="", gender=""} = req.body;
         
         // fetch user id from token
         const userId =req.user.id;
@@ -17,12 +21,15 @@ exports.updateProfile = async(req, res) => {
                 message: 'All fields are required',
             });
         }
-        // fetch the data from schemas
+        // fetch the userdetails and update the first and last name
         const userDetails = await User.findById(userId);
         const profileId = userDetails.additionalDetails;
         const profileDetails = await Profile.findById(profileId);
 
         // update the data
+        userDetails.firstName = firstName;
+        userDetails.lastName = lastName;
+
         profileDetails.contactNumber = contactNumber;
         profileDetails.dateOfBirth = dateOfBirth;
         profileDetails.about = about;
@@ -30,14 +37,16 @@ exports.updateProfile = async(req, res) => {
         
         // save the data
         const details = await profileDetails.save();
+        const user = await userDetails.save();
+
+        const updatedUserDetails = await User.findById(id).populate("additionalDetails").exec();
 
         // return the response
         return res.status(200).json({
             success: true,
             message: 'Profile is updated successfully',
-            data: details
+            updatedUserDetails,
         });
-
     }
     catch(error){
         console.log(error);
@@ -52,8 +61,10 @@ exports.updateProfile = async(req, res) => {
 // hwo can we shedule the task
 exports.deleteProfile = async (req, res) => {
   try{
+
     const id = req.user.id;
-    const userDetails = await User.findById(id);
+    console.log("THis user id is sent for deleting ", id);
+    const userDetails = await User.findById({_id: id});
     if(!userDetails){
         return res.status(404).json({
             success: false,
@@ -61,8 +72,15 @@ exports.deleteProfile = async (req, res) => {
         });
     }
 
-    await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
+    // deleting the profile
+    await Profile.findByIdAndDelete({_id: new mongoose.Types.ObjectId(userDetails.additionalDetails)});
 
+    // removing the userId from the courses in which he was enrolled already
+    for(const courseId of userDetails.courses){
+      await Course.findByIdAndUpdate(courseId, {$pull: {studentsEnrolled: id}}, {new: true});
+    }
+    
+    // now we can delete the user
     await User.findByIdAndDelete({_id: id});
 
     return res.status(200).json({
@@ -82,7 +100,8 @@ exports.deleteProfile = async (req, res) => {
 exports.getAllUserDetails = async (req, res) => {
 	try {
 		const id = req.user.id;
-		const userDetails = await User.findById(id)
+    console.log("THis user id is sent for getting user data ", id);
+		const userDetails = await User.findById({_id : id})
 			.populate("additionalDetails")
 			.exec();
 		console.log(userDetails);
@@ -101,20 +120,21 @@ exports.getAllUserDetails = async (req, res) => {
 
 exports.updateDisplayPicture = async (req, res) => {
     try {
-      const displayPicture = req.files.displayPicture
-      const userId = req.user.id
+      const displayPicture = req.files.displayPicture;
+      const userId = req.user.id;
       const image = await uploadImageToCloudinary(
         displayPicture,
         process.env.FOLDER_NAME,
         1000,
         1000
-      )
-      console.log(image)
+      );
+
       const updatedProfile = await User.findByIdAndUpdate(
         { _id: userId },
         { image: image.secure_url },
         { new: true }
       )
+      
       res.send({
         success: true,
         message: `Image Updated successfully`,
@@ -126,24 +146,64 @@ exports.updateDisplayPicture = async (req, res) => {
         message: error.message,
       })
     }
-};
+}
 
 exports.getEnrolledCourses = async (req, res) => {
     try {
-      const userId = req.user.id
+      const userId = req.user.id;
       const userDetails = await User.findOne({
         _id: userId,
       })
-      .populate("courses")
+      .populate({
+        path: "courses",
+        populate: {
+          path: "courseContent",
+          populate: {
+            path: "subSection",
+          }
+        }
+      })
       .exec();
 
+      userDetails = userDetails.toObject();
+
+      var SubsectionLength = 0;
+
+      for(var i=0; i<userDetails.courses.length; i++){
+          let totalDurationInSeconds = 0;
+          SubsectionLength = 0;
+
+          for(var j=0; j<userDetails.courses[i].courseContent.length; j++){
+            totalDurationInSeconds += userDetails.courses[i].courseContent[j].subSection.reduce((acc, curr) => acc + parseInt(curr.timeDuration), 0);
+            
+            userDetails.courses[i].totalDuration = convertSecondsToDurations(totalDurationInSeconds);
+
+            SubsectionLength += userDetails.courses[i].courseContent[j].subSection.length;
+          }
+
+          let courseProgressCount = await CourseProgress.findOne({
+            courseId: userDetails.courses[i]._id,
+            userId: userId,
+          });
+
+          courseProgressCount = courseProgressCount?.completedVideos.length;
+
+          if(SubsectionLength === 0){
+            userDetails.courses[i].progressPercentage = 100;
+          }
+          else{
+            const multiplier = Math.pow(10, 2);
+            userDetails.courses[i].progressPercentage = Math.round((courseProgressCount/SubsectionLength) * 100 * multiplier) / multiplier; 
+          }
+      }
       
       if (!userDetails) {
         return res.status(400).json({
           success: false,
           message: `Could not find user with id: ${userDetails}`,
-        })
+        });
       }
+
       return res.status(200).json({
         success: true,
         data: userDetails.courses,
@@ -155,3 +215,37 @@ exports.getEnrolledCourses = async (req, res) => {
       })
     }
 };
+
+
+exports.instructorDashboard = async (req, res) => {
+    try{
+      const courseDetails = await Course.find({instructor: req.user.id});
+
+      const courseData = courseDetails.map((course) => {
+        const totalStudentsEnrolled = course.studentsEnrolled.length;
+        const totalAmountGenerated = totalStudentsEnrolled * course.price;
+
+        const courseDataWithStats = {
+          _id: course._id,
+          courseName: course.courseName,
+          courseDescription: course.courseDescription,
+          totalStudentsEnrolled,
+          totalAmountGenerated,
+        };
+
+        return courseDataWithStats;
+      });
+
+      return res.status(200).json({
+        success: true,
+        courses: courseData,
+      })
+    }
+    catch(error){
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error in instructor Dashboard"
+      });
+    }
+}

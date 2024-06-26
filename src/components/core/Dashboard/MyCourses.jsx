@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { fetchInstructorCourses } from '../../../services/operations/courseDetailAPI';
 import IconBtn from "../../common/IconBtn";
 import {VscAdd} from 'react-icons/vsc';
+import CoursesTable from "./InstructorCourses/CoursesTable";
 
 
 export default function MyCourses(){
-    const {} = useSelector((state)=>state.auth);
+    const {token} = useSelector((state)=>state.auth);
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
         const fetchCourses = async () => {
@@ -18,9 +20,18 @@ export default function MyCourses(){
                 setCourses(result);
             }
         }
-
+        setLoading(true);
         fetchCourses();
-    }, []);
+        setLoading(false);
+    },[]);
+
+    if (loading) {
+        return (
+          <div className="grid flex-1 place-items-center">
+            <div className="spinner"></div>
+          </div>
+        )
+    }
 
     return (
         <div>
@@ -34,6 +45,7 @@ export default function MyCourses(){
                 </IconBtn>
             </div>
 
+            {courses && <CoursesTable courses={courses} setCourses={setCourses}/>}
         </div>
     )
 }

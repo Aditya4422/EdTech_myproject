@@ -35,7 +35,7 @@ export default function Upload({name, label, register, setValue, errors, video=f
 
   useEffect(() => {
     setValue(name, selectedFile);
-  }, [selectedFile, setValue, name]);
+  }, [selectedFile, setValue]);
 
   return (
     <div className="flex flex-col space-y-2">
@@ -43,7 +43,7 @@ export default function Upload({name, label, register, setValue, errors, video=f
         {label} {!viewData && <sup className="text-pink-200">*</sup>}
       </label>
 
-      <div className={`${isDragActive ? "bg-richblack-600" : "bg-richblack-700"} flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted border-richblack-500`}>
+      <div className={`${ isDragActive ? "bg-richblack-600" : "bg-richblack-700"} flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted border-richblack-500`}>
         {
             previewSource 
             ? (
@@ -86,13 +86,15 @@ export default function Upload({name, label, register, setValue, errors, video=f
                         </ul>
                     </div> */}
                     <div {...getRootProps()} className="flex w-full flex-col items-center p-6">
+
                         <input {...getInputProps()} ref={inputRef} type="file" />
                         <div className="grid aspect-square w-14 place-items-center rounded-full bg-pure-greys-800">
-                        <FiUploadCloud className="text-2xl text-yellow-50" />
+                          <FiUploadCloud className="text-2xl text-yellow-50" />
                         </div>
+
                         <p className="mt-2 max-w-[200px] text-center text-sm text-richblack-200">
-                        Drag and drop an {!video ? "image" : "video"}, or click to{" "}
-                        <span className="font-semibold text-yellow-50">Browse</span> a file
+                          Drag and drop an {!video ? "image" : "video"}, or click to{" "}
+                          <span className="font-semibold text-yellow-50">Browse</span> a file
                         </p>
                         <ul className="mt-10 flex list-disc justify-between space-x-12 text-center text-xs text-richblack-200">
                         <li>Aspect ratio 16:9</li>

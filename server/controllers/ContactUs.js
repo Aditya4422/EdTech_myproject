@@ -15,15 +15,16 @@ exports.contactUsController = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Email Sent Successfully",
+            emailResponse,
         })
     }
     catch(error){
         console.log(error);
         console.log(error.message);
 
-        return res.status(200).json({
+        return res.status(500).json({
             success: false,
-            message: "Something went wrong",
-        })
+            message: "Something went wrong in contactUsController",
+        });
     }
 }

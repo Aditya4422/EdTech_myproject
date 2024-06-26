@@ -21,15 +21,15 @@ const SubSection = require('../models/SubSection')
 exports.createCourse = async (req, res) => {
     try{
         // fetch data
-
         let {courseName, courseDescription, whatYouWillLearn, price, tag: _tag, category, status, instructions: _instructions} = req.body;
 
-        // get thumbnail
         const thumbnail =  req.files.thumbnailImage;     // we are extracting thumbnail from files because user has send it in the req files
 
         // Convert the tag and instructions from stringified Array to Array
-        const tag = JSON.parse(_tag)
-        const instructions = JSON.parse(_instructions)
+        const tag = JSON.parse(_tag);
+        const instructions = JSON.parse(_instructions);
+        console.log("Tag ", tag);
+        console.log("Instructions :", instructions);
 
         // validation
         if(!courseName || !courseDescription || !whatYouWillLearn || !price  || !tag.length || !category || !thumbnail || !instructions.length){
@@ -38,7 +38,7 @@ exports.createCourse = async (req, res) => {
                 message: 'All fields are required',
             });
         }
-        if (!status || status === undefined) {
+        if (!status || (status === undefined)) {
 			status = "Draft";
 		};
 
@@ -71,12 +71,11 @@ exports.createCourse = async (req, res) => {
             courseDescription: courseDescription,
             instructor: insturctorDetails._id,
             whatWillYouLearn: whatYouWillLearn,
-            price: price,
-            tag: tag,
+            price, tag,
             category: CategoryDetails._id,
             thumbnail: thumbnailImage.secure_url,
             status: status,
-            instructions: instructions,
+            instructions,
         });
         // update user schema by pushing the new couse id  in the courses array
         await User.findByIdAndUpdate(
@@ -90,7 +89,7 @@ exports.createCourse = async (req, res) => {
         );
         // update Category schema by pushing the new couse id  in the courses array
         await Category.findByIdAndUpdate(
-            {_id: CategoryDetails._id},
+            {_id: category},
             {
                 $push:{
                     courses: newCourse._id,
@@ -103,7 +102,7 @@ exports.createCourse = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Course is created successfully",
-            newCourse,
+            data: newCourse,
         }); 
 
     }
@@ -194,7 +193,7 @@ exports.getAllCourses = async (req, res) => {
                 ratingAndReviews: true,
                 studentsEnrolled: true,
 
-            }).populate("instuctor").exec();
+            }).populate("instructor").exec();
 
             return res.status(200).json({
                 success: true,
@@ -232,6 +231,7 @@ exports.getCourseDetails = async (req, res) => {
                                                                                 path:'courseContent',
                                                                                 populate:{
                                                                                     path:'subSection',
+                                                                                    select: '-videoUrl'
                                                                                 }
                                                                             }
                                                                         ).exec();
@@ -305,13 +305,13 @@ exports.getFullCourseDetails = async (req, res) => {
             })
         }
 
-        let totalDurationInSeconds = 0
+        let totalDurationInSeconds = 0;
         courseDetails.courseContent.forEach((content) => {
-        content.subSection.forEach((subSection) => {
-            const timeDurationInSeconds = parseInt(subSection.timeDuration)
-            totalDurationInSeconds += timeDurationInSeconds
-        })
-        })
+            content.subSection.forEach((subSection) => {
+                const timeDurationInSeconds = parseInt(subSection.timeDuration)
+                totalDurationInSeconds += timeDurationInSeconds
+            })
+        });
 
         const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
 
@@ -372,18 +372,18 @@ exports.deleteCourse = async (req, res) => {
         // unenroll students from the course
         const studentsEnrolled = course.studentsEnrolled;
         
-        for(const studentId in studentsEnrolled){
+        for(const studentId of studentsEnrolled){
             await User.findByIdAndUpdate(studentId, {$pull: {courses: courseId}});
         }
 
         // delete sections and subsections of that particular course
         const courseSections = course.courseContent;
 
-        for(const sectionId in courseSections){  // this loop for section 
+        for(const sectionId of courseSections){  // this loop for section 
             const section = await Section.findById(sectionId);
             if(section){
                 const subSections = section.subSection;
-                for(const subSectionId in subSections){  // this loop for deleting the subsection of the section
+                for(const subSectionId of subSections){  // this loop for deleting the subsection of the section
                     await SubSection.findByIdAndDelete(subSectionId);
                 }
             }
