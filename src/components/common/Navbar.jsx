@@ -25,7 +25,6 @@ import { AiOutlineMenu } from "react-icons/ai"
 
 
 function  Navbar(){
-  console.log('this is the base url: ', process.env.REACT_APP_BASE_URL);
 
   const {token} = useSelector( (state) => state.auth );
   const {user} = useSelector( (state) => state.profile );
@@ -36,19 +35,18 @@ function  Navbar(){
   const [loading, setLoading] = useState(false);
 
   useEffect(()=>{
-    (async () => {
-      setLoading(true);
-      try{
-        console.log("before hitting category api")
-        const res = await apiConnector("GET", categories.CATEGORIES_API);
-        
-        setSubLinks(res.data.data);
-        
-      }
-      catch(error){
-        console.log("Couldnot fetch categories", error);
-      }
-      setLoading(false);
+    ;(async () => {
+        setLoading(true);
+        try{
+          console.log("before hitting category api")
+          const res = await apiConnector("GET", categories.CATEGORIES_API);
+          
+          setSubLinks(res.data.data);         
+        }
+        catch(error){
+          console.log("Couldnot fetch categories", error);
+        }
+        setLoading(false);
     }) ()
   }, [])
 
@@ -57,10 +55,8 @@ function  Navbar(){
   }
 
   return (
-    <div className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 ${
-        location.pathname !== "/" ? "bg-richblack-800" : ""
-      } transition-all duration-200`}>
-
+    <div className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 
+                    ${location.pathname !== "/" ? "bg-richblack-800" : ""} transition-all duration-200`}>
       <div className='w-11/12 flex max-w-maxContent items-center justify-between'>
         
         {/* logo  */}
@@ -75,62 +71,61 @@ function  Navbar(){
             {
               NavbarLinks.map((link, index) => (
                 <li key={index}>
-                  {link.title === 'Catalog' ? (
-                    <div className={`group relative flex cursor-pointer items-center gap-1 
-                      ${matchRoute("/catalog/:catalogName")
-                        ? "text-yellow-25"
-                        : "text-richblack-25"}`}
-                    >
-                        <p>{link.title}</p>
-                        <RiArrowDownSLine />
-                        
-                        <div className='invisible absolute left-[50%] translate-x-[-50%] translate-y-[3em] top-[50%] z-[1000] w-[200px]
-                                        flex flex-col rounded-lg bg-richblack-5 p-4 text-richblack-900
-                                        opacity-0 transition-all duration-200 cursor-pointer group-hover:visibl group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px] '>
-                                          
-                            <div className='absolute left-[50%] top-0 -z-10 h-6 w-6 rotate-45 rounded elect-none
-                                            translate-x-[80%] translate-y-[-40%] bg-richblack-5'>
-                            </div>
-                            {
-                                loading 
-                                ? (
-                                     
-                                        <p className=' spinner text-center'>Loading....</p>
-                                    
-                                  ) 
-                                : subLinks.length > 0 ? (
-                                  <>
-                                    {subLinks
-                                      ?.filter(
-                                        (subLink) => subLink?.courses?.length > 0
+                  {
+                    link.title === 'Catalog' 
+                    ? (
+                        <div className={`group relative flex cursor-pointer items-center gap-1 
+                          ${matchRoute("/catalog/:catalogName") ? "text-yellow-25" : "text-richblack-25"}`}
+                        >
+                            <p>{link.title}</p>
+                            <RiArrowDownSLine />
+                            
+                            <div className='invisible absolute left-[50%] translate-x-[-50%] translate-y-[3em] top-[50%] z-[1000] w-[200px]
+                                            flex flex-col rounded-lg bg-richblack-5 p-4 text-richblack-900
+                                            opacity-0 transition-all duration-200 cursor-pointer group-hover:visibl group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px] '>
+                                              
+                                <div className='absolute left-[50%] top-0 -z-10 h-6 w-6 rotate-45 rounded elect-none
+                                                translate-x-[80%] translate-y-[-40%] bg-richblack-5'>
+                                </div>
+                                {
+                                    loading 
+                                    ? (
+                                        
+                                            <p className=' spinner text-center'>Loading....</p>
+                                        
+                                      ) 
+                                    : subLinks.length ? (
+                                      <>
+                                        {
+                                          subLinks?.filter((subLink) => subLink?.courses?.length > 0)
+                                            ?.map((subLink, i) => (
+                                              <Link
+                                                to={`/catalog/${subLink?.name
+                                                  .split(" ")
+                                                  .join("-")
+                                                  .toLowerCase()}`}
+                                                className="rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50"
+                                                key={i}
+                                              >
+                                                <p>{subLink?.name}</p>
+                                              </Link>
+                                          ))}
+                                      </>
+                                    ): ( <>
+                                              <p className=' text-center'>No courses found</p>
+                                            </>
                                       )
-                                      ?.map((subLink, i) => (
-                                        <Link
-                                          to={`/catalog/${subLink.name
-                                            .split(" ")
-                                            .join("-")
-                                            .toLowerCase()}`}
-                                          className="rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50"
-                                          key={i}
-                                        >
-                                          <p>{subLink.name}</p>
-                                        </Link>
-                                      ))}
-                                  </>
-                                ): ( <>
-                                          <p className=' text-center'>No courses found</p>
-                                        </>
-                                  )
-                            }
+                                }
+                            </div>
                         </div>
-                    </div>
-                  ) : (
-                    <Link to={link.path}>
-                      <p className={`${matchRoute(link?.path) ? "text-yellow-25" : "text-richblack-25"}`}>
-                        {link.title}
-                      </p>
-                    </Link>
-                  )}
+                    ) : (
+                      <Link to={link?.path}>
+                        <p className={`${matchRoute(link?.path) ? "text-yellow-25" : "text-richblack-25"}`}>
+                          {link?.title}
+                        </p>
+                      </Link>
+                    )
+                  }
                 </li>
             ))}
           </ul>
