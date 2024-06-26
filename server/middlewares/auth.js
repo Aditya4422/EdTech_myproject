@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
-const user = require('../models/User');
+// const User = require('../models/User');
 
 // auth
 exports.auth = async (req, res, next) => {      // next is used to go on next middleware and the order of middleware is defined in the route
@@ -37,7 +37,7 @@ exports.auth = async (req, res, next) => {      // next is used to go on next mi
         console.log(error);
         return res.status(400).json({
             success: false,
-            message: 'Something wrong happened with auth middleware',
+            message: 'Internal server error with auth middleware',
         });
     }
     
