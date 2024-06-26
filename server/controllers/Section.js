@@ -1,6 +1,6 @@
 const Course = require('../models/Course');
 const Section = require('../models/Section');
-const {uploadImageToCloudinary} = require('../utils/imageUploader');
+// const {uploadImageToCloudinary} = require('../utils/imageUploader');
 const SubSection = require('../models/SubSection');
 
 exports.createSection = async (req, res) => {
@@ -46,7 +46,7 @@ exports.createSection = async (req, res) => {
         console.log(error.message);
         return res.status(500).json({
             success: false,
-            message: 'Something wrong happened during section creation, please try again later!',
+            message: 'Internal server error during section creation, please try again later!',
         });
     }
 }
@@ -55,21 +55,19 @@ exports.createSection = async (req, res) => {
 exports.updateSection = async (req, res) => {
     try{
         //fetch the data
-        const {newSectionName, sectionId, courseId} = req.body;
+        const {sectionName, sectionId, courseId} = req.body;
 
         //validate the data
-        if(!newSectionName || !sectionId || !courseId){
+        if(!sectionName || !sectionId || !courseId){
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required',
             });
         }
         //update the Section Schema
-        const updatedSection = await Section.findByIdAndUpdate(
+        const section = await Section.findByIdAndUpdate(
             {_id : sectionId},
-            {
-                sectionName: newSectionName,
-            },
+            {sectionName: sectionName},
             {new: true},
         );
 
@@ -83,9 +81,9 @@ exports.updateSection = async (req, res) => {
         //return the response
         return res.status(200).json({
             success: true,
-            message: 'Section is updated successfully',
+            message: section,
             data:{
-                updatedSection,
+                section,
                 course,
             }
         });
@@ -94,7 +92,7 @@ exports.updateSection = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'Something wrong happend during section updation',
+            message: 'Internal server error during section updation',
         });
     }
 };
@@ -123,7 +121,6 @@ exports.deleteSection = async (req, res) => {
 
 
         // use findByIdAndDelete to delte the data
-
         // delete the subsection id from course model which have the secionId array
         await Course.findByIdAndUpdate(courseId, { $pull:{courseContent:sectionId} } ); 
 
@@ -131,7 +128,7 @@ exports.deleteSection = async (req, res) => {
         await Section.findByIdAndDelete(sectionId);
 
         // find the updated course and return the updated course in response
-        const updatedCourse = await Course.findById(courseId)
+        const course = await Course.findById(courseId)
                                           .populate({
                                             path: 'courseContent',
                                             populate:{
@@ -142,14 +139,14 @@ exports.deleteSection = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'The section is deleted successfully',
-            data: updatedCourse,
+            data: course,
         }); 
     }
     catch(error){
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'Something wrong happened in deleting the section, please try again later',
+            message: 'Internal server error in deleting the section, please try again later',
         })
     }
 };
