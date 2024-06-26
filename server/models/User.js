@@ -60,6 +60,9 @@ const userSchema = new mongoose.Schema({
             ref: "CourseProgress"
         }
     ],
+},
+{
+    timestamps: true,
 });
 
 module.exports = mongoose.model("User", userSchema);
