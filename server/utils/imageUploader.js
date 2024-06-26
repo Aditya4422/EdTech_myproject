@@ -20,7 +20,7 @@ exports.uploadImageToCloudinary = async (file, folder, height, quality) => {    
     catch(error){
         return res.status(500).json({
             success: false,
-            message: 'Something wrong happened in uploading the file, please try again later',
+            message: 'Internal server error in uploading the file, please try again later',
         });
     }
 }
