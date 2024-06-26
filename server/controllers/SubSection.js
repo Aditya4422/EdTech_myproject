@@ -1,4 +1,3 @@
-// const { findByIdAndUpdate, validate } = require('../models/Course');
 const Section = require('../models/Section');
 const SubSection = require('../models/SubSection');
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
@@ -7,11 +6,11 @@ require('dotenv').config();
 exports.createSubSection = async (req, res) => {
     try{
         // fectch the data
-        const {sectionId, title, timeDuration, description} = req.body;
+        const {sectionId, title,  description} = req.body;
         const video = req.files.video;
 
         // validate the data
-        if(!sectionId || !title || !timeDuration || !description || !video){
+        if(!sectionId || !title || !description || !video){
             return res.status(401).json({
                 success: false, 
                 message: 'All fields are required',
@@ -20,12 +19,12 @@ exports.createSubSection = async (req, res) => {
         // upload the video to cloud management servive like cloudinary
         const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
 
-        console.log('upload details are ' ,uploadDetails);
+        console.log('upload details are ', uploadDetails);
 
         // create the entry of subsection 
-        const newSubSection = await SubSection.create({
+        const SubSectionDetails = await SubSection.create({
             title: title,
-            timeDuration: `${uploadDetails.duration}`,
+            timeDuration: `${uploadDetails.duration}`,   // we will get the duration as a response after uploading the video to cloudinary
             description: description,
             videoUrl: uploadDetails.secure_url,
         });
@@ -34,7 +33,7 @@ exports.createSubSection = async (req, res) => {
             {_id: sectionId},
             {
                 $push: {
-                    subSection: newSubSection._id,
+                    subSection: SubSectionDetails._id,
                 }
             },
             {new: true}
@@ -43,14 +42,14 @@ exports.createSubSection = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Subsection is created successfully',
-            updatedSection,
+            data: updatedSection,
         });
     }
     catch(error){
         console.log(error);
         res.status(500).json({
             success: false,
-            message: 'Something wrong happened in creating the Subsection',
+            message: 'Internal server error in creating the Subsection',
             errormessage: error.message,
         });
     }
@@ -59,34 +58,31 @@ exports.createSubSection = async (req, res) => {
 exports.updateSubSection = async (req, res) => {
     try{
 
-        const { sectionId, subSectionId, title, description } = req.body
+        const { sectionId, subSectionId, title, description } = req.body;
         const subSection = await SubSection.findById(subSectionId);
     
-        if (!subSection) {
+        if(!subSection) {
             return res.status(404).json({
-            success: false,
-            message: "SubSection not found",
-            })
+                success: false,
+                message: "SubSection not found",
+            });
         }
     
-        if (title !== undefined) {
-            subSection.title = title
+        if(title !== undefined) {
+            subSection.title = title;
         }
     
-        if (description !== undefined) {
-            subSection.description = description
+        if(description !== undefined) {
+            subSection.description = description;
         }
-        if (req.files && req.files.video !== undefined) {
+        if(req.files && req.files.video !== undefined) {
             const video = req.files.video
-            const uploadDetails = await uploadImageToCloudinary(
-            video,
-            process.env.FOLDER_NAME
-            )
-            subSection.videoUrl = uploadDetails.secure_url
-            subSection.timeDuration = `${uploadDetails.duration}`
+            const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
+            subSection.videoUrl = uploadDetails.secure_url;
+            subSection.timeDuration = `${uploadDetails.duration}`;
         }
     
-        await subSection.save()
+        await subSection.save();  // updating the subSection
         
         const updatedSection = await Section.findById(sectionId).populate("subSection");
         console.log(updatedSection);
@@ -101,7 +97,7 @@ exports.updateSubSection = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: 'something wrong happened while updating the section and subsection',
+            message: 'Internal server error while updating the section and subsection',
         });
     }
 }
