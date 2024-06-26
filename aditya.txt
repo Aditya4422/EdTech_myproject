@@ -1,0 +1,1 @@
+1. In resetPassword.js controller we have to upate the reset token url after deployment

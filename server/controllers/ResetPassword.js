@@ -35,7 +35,7 @@ exports.resetPasswordToken = async (req, res) => {
         // send email containing the url
         await mailSender(email, 
                         "Password Reset Link",
-                        `Password Reset Link: ${url}`);
+                        `Password Reset Link: ${url}. Please click this url to reset the password`);
         // return response
         return res.json({
             success: true, 
@@ -43,10 +43,10 @@ exports.resetPasswordToken = async (req, res) => {
         });
     }
     catch(error){
-
+        console.log(error);
         return res.status(500).json({
             success: false, 
-            message: 'something went wrong in reset token generation',
+            message: 'Internal server error in reset token generation',
             errormessage: error.message,
         });
     }
@@ -101,7 +101,7 @@ exports.resetPassword = async (req, res) => {
         console.log(error);
         return res.status(400).json({
             success: false,
-            message: 'Something wrong happened during resetting password, please try again later!',
+            message: 'Internal server error during resetting password, please try again later!',
             errormessage: error.message,
         });
     }
