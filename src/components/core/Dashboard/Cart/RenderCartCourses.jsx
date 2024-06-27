@@ -15,7 +15,7 @@ const RenderCartCourses = () => {
     <div className="flex flex-1 flex-col">
         {
             cart.map((course, i) => (
-                <div className={`${i !== cart.length -1 && "border-b border-b-richblack-400 pb-6"} ${i !== 0 && "mt-6"} flex w-full flex-wrap items-start justify-between gap-6`}>
+                <div key={i} className={`${i !== cart.length -1 && "border-b border-b-richblack-400 pb-6"} ${i !== 0 && "mt-6"} flex w-full flex-wrap items-start justify-between gap-6`}>
                     
                     <div className="flex flex-1 flex-col gap-4 xl:flex-row">
                         <img src={course?.thumbnail} alt={course?.courseName} 
