@@ -109,14 +109,14 @@ const ContactUsForm = () => {
                                }
                         />
                     </div>
-                    {
+                </div>
+                {
                         errors.phoneNo && (
                             <span className='-mt-1 text-[12px] text-yellow-100'>
                                 {errors.phoneNo.message}
                             </span>
                         )
-                    }
-                </div>
+                }
             </div>
                 
             <div className=' flex flex-col gap-2'>
@@ -131,7 +131,7 @@ const ContactUsForm = () => {
                         {...register("message", {required: true})}
                 />
                 {
-                    errors.messaage && (
+                    errors.message && (
                         <span className="-mt-1 text-[12px] text-yellow-100">
                             Please enter your Message.
                         </span>
