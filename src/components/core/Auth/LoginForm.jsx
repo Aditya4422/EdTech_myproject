@@ -30,20 +30,18 @@ function LoginForm() {
         <form onSubmit={handleOnSubmit} className='mt-6 flex w-full flex-col gap-y-4'>
             
             <label className='w-full'>
-                <p className='mb-1 text-[0.875] leading-[1.375] text-richblack-5'>Email Address</p>
+                <p className='mb-1 text-[0.875] leading-[1.375] text-richblack-5'>Email Address <sup className="text-pink-200">*</sup></p>
                 <input type="text" required name="email" value={email} onChange={handleOnChange} placeholder="Enter email address"
-                        style={{boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)"}}
-                        className='w-full rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5' 
+                        className=" form-style w-full" 
                 />
             </label>
 
-            <label>
+            <label className=" relative">
                 <p className='mb-1 text-[0.875] leading-[1.375] text-richblack-5'>
                     Password <sup className='text-pink-200'>*</sup>
                 </p>
-                <input type={showPassword ? "text" : "password"} required name="password" value={password} onChange={handleOnChange} placeholder="Enter Password"
-                        style={{boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",}} 
-                        className='w-full rounded-[0.5rem] bg-richblack-800 p-[12px] pr-12 text-richblack-5'
+                <input type={showPassword ? "text" : "password"} required name="password" value={password} 
+                    onChange={handleOnChange} placeholder="Enter Password" className=" form-style w-full !pr-10"
                 />
     
                 <span onClick={()=>setShowPassword((prev) => !prev)} className="absolute right-3 top-[38px] z-[10] cursor-pointer">
