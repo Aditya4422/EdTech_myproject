@@ -12,8 +12,8 @@ const CourseSlider = ({Courses}) => {
         {
             Courses?.length
             ? (
-                <Swiper slidesPerView={1} loop={true} spaceBetween={200} breakpoints={{1024 : {slidesPerView: 3}}}
-                    pagination={true} navigation={true} className='mySwiper'
+                <Swiper slidesPerView={1} loop={true} spaceBetween={25} breakpoints={{1024 : {slidesPerView: 3}}}
+                    pagination={true} navigation={true} className='mySwiper max-h-[30rem]'
                     modules={[Autoplay, Pagination, Navigation]} autoplay={{delay:1000, disableOnInteraction:false}}
                 >
                     {
@@ -26,7 +26,7 @@ const CourseSlider = ({Courses}) => {
                 </Swiper>
               )
             : (
-                <p>No Courses Found</p>
+                <p className="text-xl text-richblack-5">No Courses Found</p>
               )
         }
     </>
