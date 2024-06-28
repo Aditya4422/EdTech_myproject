@@ -1,3 +1,5 @@
 1. In resetPassword.js controller we have to upate the reset token url after deployment
 
 2. start from render amount.jsx
+
+3. add to cart button in CourseDetails.jsx
