@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useParams, Outlet } from 'react-router-dom'
 import { getFullDetailsOfCourse } from '../services/operations/courseDetailAPI';
 import { setCompletedLectures, setCourseSectionData, setEntireCourseData, setTotalNoOfLectures } from '../slices/viewCourseSlice';
+import VideoDetailsSidebar from '../components/core/ViewCourse/VideoDetailsSidebar';
+import CourseReviewModal from '../components/core/ViewCourse/CourseReviewModal';
 
 const ViewCourse = () => {
 
@@ -28,9 +30,18 @@ const ViewCourse = () => {
     },[])
 
   return (
-    <div>
-        
-    </div>
+    <>
+        <div className="relative flex min-h-[calc(100vh-3.5rem)]">
+            <VideoDetailsSidebar setReviewModal={setReviewModal}/> 
+            <div className='h-[calc(100vh-3.5rem)] flex-1 overflow-auto'>
+                <div className=' mx-6'>
+                    <Outlet/>
+                </div>
+            </div>       
+        </div>
+
+        {reviewModal && <CourseReviewModal setReviewModal={setReviewModal}/>}
+    </>
   )
 }
 
