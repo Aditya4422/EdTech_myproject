@@ -79,7 +79,7 @@ function UpdatePassword() {
                             Reset Password
                         </button>
                     </form>
-                    <div>
+                    <div className="mt-6 flex items-center justify-between">
                         <Link to={"/login"}>
                             <p className="flex items-center gap-x-2 text-richblack-5">
                                 <BiArrowBack/> Back to Login
