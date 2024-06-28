@@ -94,7 +94,7 @@ export function deleteProfile(token, navigate){
                 Authorization: `Bearer ${token}`,
             });
 
-            console.log("Delete profile api response", response);
+            console.log("Delete profile api response.... ", response);
 
             if(!response.data.success){
                 throw new Error(response.data.message);
