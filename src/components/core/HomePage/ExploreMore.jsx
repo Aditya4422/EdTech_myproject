@@ -20,14 +20,16 @@ const ExploreMore = () => {
 
   return (
     <div>
-        <div className='text-center font-semibold text-4xl'>
+        <div className='text-center font-semibold text-4xl my-10'>
           Unlock the <HighlightText text={"Power of Code"}/>
-        </div>
-        <p className='text-center text-richblack-300  text-sm text-[16px] mt-3 '>
-          Learn to build anything you can imagine
-        </p>
 
-        <div className='mt-5 flex flex-row rounded-full bg-richblack-800 mb-5 border-richblack-100 px-1 py-1'>
+          <p className='text-center text-richblack-300  text-sm text-[16px] mt-3 '>
+            Learn to build anything you can imagine
+          </p>
+        </div>
+        
+
+        <div className='hidden lg:flex gap-5 -mt-5 mx-auto w-max bg-richblack-800 text-richblack-200 p-1 rounded-full font-medium drop-shadow-[0_1.5px_rgba(255,255,255,0.25)]'>
            {
             tabsName.map( (element, index) => {
               return (
@@ -43,9 +45,9 @@ const ExploreMore = () => {
            }
         </div>
 
-        <div className='lg:h-[150px]'></div>
+        <div className='hidden lg:block lg:h-[200px]'></div>
 
-        <div className='absolute flex flex-row gap-10 justify-between w-full bg-richblack-200'>
+        <div className='lg:absolute gap-10 justify-center lg:gap-0 flex lg:justify-between flex-wrap w-full lg:bottom-[0] lg:left-[50%] lg:translate-x-[-50%] lg:translate-y-[50%] text-black lg:mb-0 mb-7 lg:px-0 px-3'>
           {
             courses.map ( (element, index) => {
               return (
