@@ -3,3 +3,5 @@
 2. start from render amount.jsx
 
 3. add to cart button in CourseDetails.jsx
+
+4. Instructor.jsx in Dashboard is remaining
