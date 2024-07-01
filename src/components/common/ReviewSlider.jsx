@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { apiConnector } from "../../services/apiconnector";
 import { ratingsEndpoints } from "../../services/apis";
 import { Swiper, SwiperSlide} from 'swiper/react';
-import { Autoplay, FreeMode, Pagination } from 'swiper';
+import { Autoplay, FreeMode, Pagination } from 'swiper/modules';
 import ReactStars from 'react-rating-stars-component';
 import { FaStar } from 'react-icons/fa'
 
