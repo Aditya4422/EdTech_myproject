@@ -7,10 +7,11 @@ import CountryCode from '../../data/countrycode.json';
 const ContactUsForm = () => {
 
   const [loading, setLoading] = useState(false);
-  // we are going to use react-hook-form,  a npm package which automates the form management and reduces our lot of work
+
   const { register, handleSubmit, reset, formState: {errors, isSubmitSuccessful} } = useForm();
 
   const submitContactForm = async (data) => {
+    console.log("data recieved for maiking contact api call..", data);
     try{
         setLoading(true);
         const res = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
@@ -87,7 +88,7 @@ const ContactUsForm = () => {
                                 CountryCode.map((ele, i) => {
                                     return (
                                         <option value={ele.code} key={i}>
-                                            {ele.code}-{ele.country}
+                                            {ele.code} - {ele.country}
                                         </option>
                                     )
                                 })
@@ -104,7 +105,7 @@ const ContactUsForm = () => {
                                 ...register("phoneNo", 
                                             {required: {value: true, message: "Please Enter your phone number"},
                                             maxLength: {value: 12, message: "Invalid Phone Number"},
-                                            maxLength: {value: 8, messaage: "Invalid Phone number"}
+                                            minLength: {value: 10, messaage: "Invalid Phone number"}
                                         })
                                }
                         />
