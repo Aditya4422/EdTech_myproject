@@ -21,9 +21,9 @@ const Catalog = () => {
         ;(async() => {
             try{
                 const res = await apiConnector("GET", categories.CATEGORIES_API);
-                console.log("result after hitting categories API ....", res);
+                // console.log("result after hitting categories API ....", res);
                 const category_id = res?.data?.data?.filter((ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName)[0]._id;
-                console.log("category_id after filtering the data ...", category_id);
+                // console.log("category_id after filtering the data ...", category_id);
                 setCategoryId(category_id);
             }
             catch(error){
@@ -36,9 +36,9 @@ const Catalog = () => {
         if(categoryId){
             ;( async () => {
                 try{
-                    console.log("before hitting the getCatalogPage Data api ....")
+                    // console.log("before hitting the getCatalogPage Data api ....")
                     const res = await getCatalogPageData(categoryId);
-                    console.log("after hitting the getCatalogPage Data api...", res);
+                    // console.log("after hitting the getCatalogPage Data api...", res);
                     setCatalogPageData(res);
                 }
                 catch(error){
