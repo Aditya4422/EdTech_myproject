@@ -32,15 +32,15 @@ export default function CoursesTable ({courses, setCourses}) {
     }
 
     return(
-        <>
+        <div>
             <Table className="rounded-xl border border-richblack-800 ">
 
                 <Thead>
                     <Tr className="flex gap-x-10 rounded-t-md border-b border-b-richblack-800 px-6 py-2">
-                        <Th className="text-left text-sm font-medium uppercase text-richblack-100">Courses</Th>
-                        <Th className="text-left text-sm font-medium uppercase text-richblack-100">Duration</Th>
-                        <Th className="text-left text-sm font-medium uppercase text-richblack-100">Price</Th>
-                        <Th className="text-left text-sm font-medium uppercase text-richblack-100">Actions</Th>
+                            <Th className=" flex-auto text-left text-sm font-medium uppercase text-richblack-100 px-16">Courses</Th>
+                            {/* <Th className="text-left text-sm font-medium uppercase text-richblack-100">Duration</Th>
+                            <Th className="text-left text-sm font-medium uppercase text-richblack-100">Price</Th>
+                            <Th className="text-left text-sm font-medium uppercase text-richblack-100">Actions</Th>                 */}
                     </Tr>
                 </Thead>
 
@@ -85,12 +85,12 @@ export default function CoursesTable ({courses, setCourses}) {
                                                     </p>
                                                   )
                                                 : (
-                                                    <p className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-yellow-100">
-                                                        <div className="flex h-3 w-3 items-center justify-center rounded-full bg-yellow-100 text-richblack-700">
+                                                    <div className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-yellow-100">
+                                                        <p className="flex h-3 w-3 items-center justify-center rounded-full bg-yellow-100 text-richblack-700">
                                                             <FaCheck size={8}/>
-                                                        </div>
+                                                        </p>
                                                         Published 
-                                                    </p>
+                                                    </div>
                                                   )
                                             }
                                         </div>
@@ -104,7 +104,7 @@ export default function CoursesTable ({courses, setCourses}) {
                                         ₹ {course.price}
                                     </Td>
 
-                                    <Td>
+                                    <Td className="text-sm font-medium text-richblack-100">
                                         <button disabled={loading} title="Edit" className="px-2 transition-all duration-200 hover:scale-110 hover:text-caribbeangreen-300"
                                             onClick={() => navigate(`/dashboard/edit-course/${course._id}`)}
                                         >
@@ -118,7 +118,7 @@ export default function CoursesTable ({courses, setCourses}) {
                                                     text2: "All the data related to this course will be deleted",
                                                     btn1Text: !loading ? "Delete" : "Loading...",
                                                     btn2Text: "Cancel",
-                                                    btn1Handler: !loading ? () => handleCourseDelete() : () => {},
+                                                    btn1Handler: !loading ? () => handleCourseDelete(course._id) : () => {},
                                                     btn2Handler: !loading ? () => setConfirmationModal(null) : () => {},
                                                 })
                                              }}
@@ -133,7 +133,7 @@ export default function CoursesTable ({courses, setCourses}) {
                 </Tbody>
             </Table>
             {confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}
-        </>
+        </div>
     )
 }
 

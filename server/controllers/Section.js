@@ -38,7 +38,7 @@ exports.createSection = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Section is created successfully',
-            updatedCourse,
+            data: updatedCourse,
         });
     }
     catch(error){
@@ -82,10 +82,7 @@ exports.updateSection = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: section,
-            data:{
-                section,
-                course,
-            }
+            data:course,
         });
     }
     catch(error){
@@ -124,7 +121,7 @@ exports.deleteSection = async (req, res) => {
         // delete the subsection id from course model which have the secionId array
         await Course.findByIdAndUpdate(courseId, { $pull:{courseContent:sectionId} } ); 
 
-        await SubSection.deleteMany({_id: {$in: section.subSection}});
+        await SubSection.deleteMany({_id: {$in: isSection.subSection}});
         await Section.findByIdAndDelete(sectionId);
 
         // find the updated course and return the updated course in response
@@ -147,6 +144,7 @@ exports.deleteSection = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Internal server error in deleting the section, please try again later',
+            wrong: error.message,
         })
     }
 };

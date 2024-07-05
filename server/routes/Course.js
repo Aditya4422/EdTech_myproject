@@ -38,7 +38,7 @@ router.delete('/deleteCourse', deleteCourse);
 // 2. Category routes (for admins)
 router.post('/createCategory', auth, isAdmin, createCategory);
 router.get('/showAllCategories', showAllCategories);
-router.get('/getCategoryPageDetails', categoryPageDetails);
+router.post('/getCategoryPageDetails', categoryPageDetails);
 
 // 3. Rating and Reviews
 router.post('/createRating', auth, isStudent, createRating);

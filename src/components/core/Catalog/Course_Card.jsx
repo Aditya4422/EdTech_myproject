@@ -20,7 +20,7 @@ const Course_Card = ({course, Height}) => {
                 </div>
                 <div className="flex flex-col gap-2 px-1 py-3">
                     <p className="text-xl text-richblack-5">{course?.courseName}</p>
-                    <p className="text-sm text-richblack-50">{course?.instructor?.firstName} {course?.instructor?.lastName}</p>
+                    {/* <p className="text-sm text-richblack-50">{course?.instructor?.firstName} {course?.instructor?.lastName}</p> */}
                     <div className="flex items-center gap-2">
                         <span className="text-yellow-5">{avgReviewCount}</span>
                         <RatingStars Review_count={avgReviewCount}/>

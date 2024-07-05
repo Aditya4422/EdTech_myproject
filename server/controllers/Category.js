@@ -53,7 +53,7 @@ exports.createCategory = async (req, res) => {
 exports.showAllCategories = async (req, res) => {
     try{
         // fetch all the data but on some condition that all those Categorys must have some name and description4
-        const allCategories = await Category.find({},{name: true, description: true});
+        const allCategories = await Category.find({}).populate("courses");
         return res.status(200).json({
             success: true,
             message: 'These all the the Categories',
@@ -98,6 +98,7 @@ exports.categoryPageDetails = async (req, res) => {
 			return res.status(404).json({
 				success: false,
 				message: "No courses found for the selected category.",
+
 			});
 		}
 
@@ -117,10 +118,11 @@ exports.categoryPageDetails = async (req, res) => {
               match: { status: "Published" },
               populate: {path: "instructor",},
             }).exec();
+            
         const allCourses = allCategories.flatMap((category) => category.courses);
         const mostSellingCourses = allCourses.sort((a, b) => b.sold - a.sold).slice(0, 10);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             data: {
               selectedCourses,

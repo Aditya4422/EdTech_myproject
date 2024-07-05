@@ -9,7 +9,7 @@ export default function Instructor() {
     const {token} = useSelector((state) => state.auth);
     const {user} = useSelector((state) => state.profile);
     const [loading, setLoading] = useState(false);
-    const [instructorData, setInstructorData] = useState(null);
+    const [instructorData, setInstructorData] = useState([]);
     const [courses, setCourses] = useState([]);
 
     useEffect(() => {
@@ -18,16 +18,13 @@ export default function Instructor() {
 
             const instructorApiData = await getInstructorData(token);
             const result = await fetchInstructorCourses(token);
-            console.log("Instructor courses : ", instructorApiData);
-
+            // console.log("Instructor courses : ", instructorApiData);
             if(instructorApiData.length){
                 setInstructorData(instructorApiData);
             }
-
             if(result){
                 setCourses(result);
             }
-
             setLoading(false);
         })()
     }, []);
@@ -51,7 +48,7 @@ export default function Instructor() {
                     ?   (<div>
                             <div className="my-4 flex h-[450px] space-x-4">
                                 {
-                                    totalAmount > 0 ? (<InstructorChart/>)
+                                    totalAmount > 0 ? (<InstructorChart courses={instructorData}/>)
                                     : (<div className="flex-1 rounded-md bg-richblack-800 p-6">
                                             <p className="text-lg font-bold text-richblack-5">Visualize</p>
                                             <p className="mt-4 text-xl font-medium text-richblack-50">
@@ -107,7 +104,7 @@ export default function Instructor() {
                                                 </p>
                                                 <div className="mt-1 flex items-center space-x-2">
                                                 <p className="text-xs font-medium text-richblack-300">
-                                                    {course.studentsEnroled.length} students
+                                                    {course.studentsEnrolled.length} students
                                                 </p>
                                                 <p className="text-xs font-medium text-richblack-300">
                                                     |

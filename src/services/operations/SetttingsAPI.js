@@ -15,7 +15,7 @@ export function updateDisplayPicture (token, formData) {
                 Authorization: `Bearer ${token}`
             });
 
-            console.log("Update display picture api response ...", response);
+            // console.log("Update display picture api response ...", response);
 
             if(!response.data.success){
                 throw new Error(response.data.message);
@@ -40,7 +40,7 @@ export function updateProfile(token, formData){
                 Authorization: `Bearer ${token}`
             });
 
-            console.log("Update profile api response ...", response);
+            // console.log("Update profile api response ...", response);
 
             if(!response.data.success){
                 throw new Error(response.data.message);
@@ -65,11 +65,12 @@ export function updateProfile(token, formData){
 export async function changePassword (token, formData){
     const toastId = toast.loading("Loading...");
     try{
+        // console.log("form Data for updating password is ", formData);
         const response = await apiConnector("POST", CHANGE_PASSWORD_API, formData, {
             Authorization: `Bearer ${token}`,
         });
 
-        console.log("change password api response ....", response);
+        // console.log("change password api response ....", response);
 
         if(!response.data.success){
             throw new Error(response.data.message);
@@ -94,7 +95,7 @@ export function deleteProfile(token, navigate){
                 Authorization: `Bearer ${token}`,
             });
 
-            console.log("Delete profile api response.... ", response);
+            // console.log("Delete profile api response.... ", response);
 
             if(!response.data.success){
                 throw new Error(response.data.message);

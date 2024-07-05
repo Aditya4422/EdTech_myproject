@@ -35,7 +35,7 @@ export default function NestedView ({handleChangeEditSectionName}){
         if(result){  // now update the structure of course, so it will be reflected on UI
             const updatedCourseContent = course.courseContent.map((section) => section._id === sectionId ? result : section); 
             
-            const updatedCourse = {...course, courseContent: updatedCourseContent};
+            const updatedCourse = { ...course, courseContent: updatedCourseContent};
             dispatch(setCourse(updatedCourse));
         }
         setConfirmationModal(null);

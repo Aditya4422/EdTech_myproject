@@ -1,4 +1,4 @@
-function convertSecondsToDurations (totalSeconds) {
+function convertSecondsToDuration (totalSeconds) {
     const hours = Math.floor(totalSeconds/3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = Math.floor((totalSeconds % 3600) % 60);
@@ -15,5 +15,5 @@ function convertSecondsToDurations (totalSeconds) {
 }
 
 module.exports = {
-    convertSecondsToDurations,
+    convertSecondsToDuration,
 }

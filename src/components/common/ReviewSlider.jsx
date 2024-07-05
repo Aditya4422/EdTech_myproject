@@ -28,7 +28,7 @@ function ReviewSlider(){
     return(
         <div className="text-white">
             <div className="my-[50px] h-[184px] max-w-maxContentTab lg:max-w-maxContent">
-                <Swiper slidesPerView={4} spaceBetween={25} loop={true} className="w-full"
+                <Swiper slidesPerView={4} spaceBetween={25} loop={false} className="w-full"
                     freeMode={true} autoplay={{delay: 2500, disableOnInteraction: false}}
                     modules={[FreeMode, Pagination, Autoplay]}
                 >

@@ -4,7 +4,7 @@ import { resetCart } from "../../slices/cartSlice";
 import { setPaymentLoading } from "../../slices/courseSlice";
 import { apiConnector } from "../apiconnector";
 import { studentEndpoints } from "../apis";
-require("dotenv").config();
+// require("dotenv").config();
 
 const {COURSE_PAYMENT_API, COURSE_VERIFY_API, SEND_PAYMENT_SUCCESS_EMAIL_API} = studentEndpoints;
 

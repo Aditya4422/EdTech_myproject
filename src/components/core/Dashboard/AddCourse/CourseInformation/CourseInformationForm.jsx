@@ -29,10 +29,12 @@ const CourseInformationForm = () => {
             if(categories.length > 0){
                 setCourseCategories(categories);
             }
+            // console.log("Printing values of course used in course slice whose thumbnail value is sent to UploadForm ,", course);
             setLoading(false);
         }
 
         // if form is in edit mode
+        // console.log("value of edit course ,", editCourse);
         if(editCourse){
             setValue("courseTitle", course.courseName);
             setValue("courseShortDesc", course.courseDescription);
@@ -42,6 +44,7 @@ const CourseInformationForm = () => {
             setValue("courseCategory", course.category);
             setValue("courseRequirements", course.instructions);
             setValue("courseImage", course.thumbnail);
+            console.log("data populated when form is in edit mode ,", course);
         }
 
         getCategories();
@@ -49,6 +52,8 @@ const CourseInformationForm = () => {
 
     const isFormUpdated = () => {
         const currentValues = getValues();
+
+        //  console.log("value of current value of form in isFormUpdated", currentValues);
 
         if(
             currentValues.courseTitle !== course.courseName ||
@@ -99,6 +104,8 @@ const CourseInformationForm = () => {
                     formData.append("thumbnailImage", data.courseImage)
                 }
 
+                console.log("form Data in edit course, ", formData);
+
                 setLoading(true);
                 const result = await editCourseDetails(formData, token);
                 setLoading(false);
@@ -127,6 +134,7 @@ const CourseInformationForm = () => {
         formData.append("thumbnailImage", data.courseImage);
 
         setLoading(true);
+        // console.log("form Data in newly created course form Data, and sending to adCourse Details api ", formData);
         const result = await addCourseDetails(formData, token);
         if(result){
             dispatch(setStep(2));
@@ -207,9 +215,12 @@ const CourseInformationForm = () => {
         />
 
         {/* Upload  */}
+
         <Upload name="courseImage" label="Course Thumbnail" register={register} errors={errors}
                 setValue={setValue} editData={editCourse ? course?.thumbnail : null}
         />
+
+
 
         <div className="flex flex-col space-y-2">
             <label htmlFor="courseBenefits" className="text-sm text-richblack-5">Benefits of the Course <sup className=' text-pink-200'>*</sup></label>
@@ -237,7 +248,7 @@ const CourseInformationForm = () => {
                 )
             }
 
-            <IconBtn disabled={loading} text={!editCourse ? "Next" : "Save Changes"}/>
+            <IconBtn onclick={handleSubmit(onSubmit)} disabled={loading} text={!editCourse ? "Next" : "Save Changes"}/>
             <MdNavigateNext/>
         </div>
 

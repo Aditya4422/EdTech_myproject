@@ -54,11 +54,15 @@ export default function SubSectionModal({modalData, setModalData, add=false, vie
             formData.append("video", currentValues.lectureVideo);
         }
 
+        // console.log("values of form data being used to call update subsection api ...", formData);
+
         setLoading(true);
         const result = await updateSubSection(formData, token);
+        // console.log("result after updating Subsection ....", result);
         if(result){
             const updatedCourseContent = course.courseContent.map((section) => section._id === modalData.sectionId ? result : section);
             const updatedCourse = {...course, courseContent: updatedCourseContent};
+            // console.log("updated course content after getting result from update subsection api call..", updatedCourse);
             dispatch(setCourse(updatedCourse));
         }
 

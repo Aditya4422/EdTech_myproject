@@ -23,6 +23,7 @@ const ChangeProfilePicture = () => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        console.log("file we get for updating picture is :", file);
         if(file){
             setImageFile(file);
             previewFile(file);
@@ -41,7 +42,8 @@ const ChangeProfilePicture = () => {
         try{
             setLoading(true);
             const formData = new FormData();
-            formData.append("Display Picture", imageFile);
+            formData.append("displayPicture", imageFile);
+            console.log("form data for upating the picture is ", formData);
             dispatch(updateDisplayPicture(token, formData)).then(() => {setLoading(false)});
         }
         catch(error){

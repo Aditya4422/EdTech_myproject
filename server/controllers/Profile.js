@@ -14,21 +14,17 @@ exports.updateProfile = async(req, res) => {
         // fetch user id from token
         const userId =req.user.id;
 
-        // validate the data
-        if(!contactNumber || !gender || !userId){
-            return res.status(401).json({
-                success: false, 
-                message: 'All fields are required',
-            });
-        }
         // fetch the userdetails and update the first and last name
         const userDetails = await User.findById(userId);
         const profileId = userDetails.additionalDetails;
         const profileDetails = await Profile.findById(profileId);
 
         // update the data
-        userDetails.firstName = firstName;
-        userDetails.lastName = lastName;
+        const user = await User.findById(userId, {
+          firstName,
+          lastName
+        });
+        await user.save();
 
         profileDetails.contactNumber = contactNumber;
         profileDetails.dateOfBirth = dateOfBirth;
@@ -36,10 +32,9 @@ exports.updateProfile = async(req, res) => {
         profileDetails.gender = gender;
         
         // save the data
-        const details = await profileDetails.save();
-        const user = await userDetails.save();
+        await profileDetails.save();
 
-        const updatedUserDetails = await User.findById(id).populate("additionalDetails").exec();
+        const updatedUserDetails = await User.findById(userId).populate("additionalDetails").exec();
 
         // return the response
         return res.status(200).json({
@@ -105,7 +100,8 @@ exports.getAllUserDetails = async (req, res) => {
 			.populate("additionalDetails")
 			.exec();
 		console.log(userDetails);
-		res.status(200).json({
+
+		return res.status(200).json({
 			success: true,
 			message: "User Data fetched successfully",
 			data: userDetails,
@@ -135,7 +131,7 @@ exports.updateDisplayPicture = async (req, res) => {
         { new: true }
       )
       
-      res.send({
+      return res.status(200).json({
         success: true,
         message: `Image Updated successfully`,
         data: updatedProfile,

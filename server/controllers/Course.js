@@ -4,7 +4,7 @@ const User = require('../models/User');
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
 require('dotenv').config();
 const CourseProgress = require('../models/CourseProgress');
-const {convertSecondsToDurations} = require('../utils/secToDuration')
+const { convertSecondsToDuration } = require('../utils/secToDuration')
 const Section = require('../models/Section')
 const SubSection = require('../models/SubSection')
 
@@ -164,7 +164,7 @@ exports.editCourse = async(req, res) => {
             }
         }).exec();
 
-        return res.status(200).josn({
+        return res.status(200).json({
             success: true,
             message: "Courese Updated successfully",
             data: updatedCourse,
@@ -216,7 +216,7 @@ exports.getCourseDetails = async (req, res) => {
         // fetch the coursre id 
         const {courseId} = req.body;
         // find the details on the basis of courseId  and populate all the object id present in the coursre details
-        const courseDetails = await Course.find({_id: courseId}).populate(
+        const courseDetails = await Course.findOne({_id: courseId}).populate(
                                                                             {
                                                                                 path: 'instructor',
                                                                                 populate: {
@@ -236,6 +236,7 @@ exports.getCourseDetails = async (req, res) => {
                                                                             }
                                                                         ).exec();
         // validate the data
+        // console.log("course details are ....", courseDetails);
         if(!courseDetails){
             return res.status(400).json({
                 success: false,
@@ -253,7 +254,7 @@ exports.getCourseDetails = async (req, res) => {
             })
         })
 
-        totalDuration = convertSecondsToDurations(totalDuration);
+        totalDuration = convertSecondsToDuration(totalDuration);
 
         // return the response
         return res.status(200).json({
@@ -361,11 +362,13 @@ exports.deleteCourse = async (req, res) => {
     try{
         const { courseId } = req.body;
         
+        console.log("courseId recieved by controller is ...", courseId);
         const course = await Course.findById(courseId);
         if(!course){
             return res.status(404).json({
                 success: false,
-                message: "course not found",
+                message: "course not found by controller",
+                data: courseId,
             });
         }
 

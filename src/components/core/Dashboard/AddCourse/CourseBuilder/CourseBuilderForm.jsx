@@ -103,8 +103,8 @@ const CourseBuilderForm = () => {
                 }
             </div>
 
-            <div>
-                <IconBtn type='submit' disabled={loading}  outline={true} 
+            <div className="flex items-end gap-x-4">
+                <IconBtn type='submit' disabled={loading}  outline={true} onclick={handleSubmit(onSubmit)}
                     text={editSectionName ? "Edit Section Name" : "Create Section"}
                 >
                     <IoAddCircleOutline size={20} className=' text-yellow-50'/>

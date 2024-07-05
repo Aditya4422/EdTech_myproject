@@ -27,7 +27,7 @@ function CourseDetailsCard({course, setConfirmationModal, handleBuyCourse}) {
 
     const handleAddToCart = () => {
         if(user && user?.accountType === ACCOUNT_TYPE.INSTRUCTOR){
-            toast.error("You can't buy a course");
+            toast.error("You can't add to cart a course beacuse you are an instructor");
             return;
         }
         
@@ -59,7 +59,8 @@ function CourseDetailsCard({course, setConfirmationModal, handleBuyCourse}) {
                     <div className="flex flex-col gap-4">
                         <button className="yellowButton"
                             onClick={ user && course?.studentsEnrolled.includes(user?._id)
-                                    ? () => navigate("/dashboard/enrolled-courses") : handleBuyCourse}
+                                    ? () => navigate("/dashboard/enrolled-courses") 
+                                    : handleBuyCourse}
                         >
                             {
                                 user && course?.studentsEnrolled.includes(user?._id)

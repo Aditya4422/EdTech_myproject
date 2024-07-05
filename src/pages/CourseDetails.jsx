@@ -11,10 +11,12 @@ import {formatDate} from '../services/formatDate';
 import { BiInfoCircle } from 'react-icons/bi';
 import { HiOutlineGlobeAlt } from 'react-icons/hi';
 import CourseDetailsCard from '../components/core/Course/CourseDetailsCard';
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+// import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import CourseAccordionBar from '../components/core/Course/CourseAccordionBar';
 import Footer from '../components/common/Footer';
-import ConfirmationModal from '../components/common/ConfirmationModal'
+import ConfirmationModal from '../components/common/ConfirmationModal';
+import { ACCOUNT_TYPE } from '../utils/constants';
+import toast from 'react-hot-toast';
 
 const CourseDetails = () => {
 
@@ -92,6 +94,10 @@ const CourseDetails = () => {
 
     const handleBuyCourse = () => {
         if(token){
+            if(user?.accountType === ACCOUNT_TYPE.INSTRUCTOR){
+                toast.error("You can't buy the course because you are an instructor");
+                return;
+            }
             BuyCourse(token, [courseId], user, navigate, dispatch);
             return;
         }
@@ -175,7 +181,7 @@ const CourseDetails = () => {
                 <div className='my-8 border border-richblack-600 p-8'>
                     <p className='text-3xl font-semibold'>What you'll learn</p>
                     <div className=' mt-5'>
-                        <ReactMarkdown>{whatYouWillLearn}</ReactMarkdown>
+                        {whatYouWillLearn}
                     </div>
                 </div>
 

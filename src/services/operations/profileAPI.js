@@ -16,7 +16,7 @@ export function getUserDetails (token, navigate) {
                 Authorization: `Bearer ${token}`,
             });
 
-            console.log("Get user details", response);
+            // console.log("Get user details", response);
 
             if(!response.data.success){
                 throw new Error(response.data.message);
@@ -52,8 +52,9 @@ export async function getUserEnrolledCourses(token) {
     }
     catch(error){
         console.log("GET_USER_ENROLLED_COURSES_API API ERROR............", error);
-        toast.error("Could Not Get Enrolled Courses");
+        toast.error("No Enrolled Courses");
     }
+
     toast.dismiss(toastId);
     return result;
 }
@@ -67,7 +68,7 @@ export async function getInstructorData(token) {
             Authorization: `Bearer ${token}`,
         });
 
-        console.log("InstructorData api response : ", response);
+        // console.log("InstructorData api response : ", response);
 
         result = response?.data?.courses;
     }

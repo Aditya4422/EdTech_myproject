@@ -21,7 +21,9 @@ const Catalog = () => {
         ;(async() => {
             try{
                 const res = await apiConnector("GET", categories.CATEGORIES_API);
+                console.log("result after hitting categories API ....", res);
                 const category_id = res?.data?.data?.filter((ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName)[0]._id;
+                console.log("category_id after filtering the data ...", category_id);
                 setCategoryId(category_id);
             }
             catch(error){
@@ -34,7 +36,9 @@ const Catalog = () => {
         if(categoryId){
             ;( async () => {
                 try{
+                    console.log("before hitting the getCatalogPage Data api ....")
                     const res = await getCatalogPageData(categoryId);
+                    console.log("after hitting the getCatalogPage Data api...", res);
                     setCatalogPageData(res);
                 }
                 catch(error){
@@ -60,7 +64,7 @@ const Catalog = () => {
     <>
         <div className='box-content bg-richblack-800 px-4'>
             <div className='mx-auto flex min-h-[260px] max-w-maxContentTab flex-col justify-center gap-4 lg:max-w-maxContent'>
-                <p className='text-sm text-richblack-300'>{`Home / Catalog /`}
+                <p className='text-sm text-richblack-300'>{`Home / Catalog / `}
                     <span className='text-yellow-25'>{catalogPageData?.data?.selectedCategory?.name}</span>
                 </p>
 
@@ -79,11 +83,11 @@ const Catalog = () => {
             <div className='section_heading'>Courses to get you started</div>
 
             <div className='my-4 flex border-b border-b-richblack-600 text-sm'>
-                <p onClick={() => setActive(1)} className={`${active === 1 ? "border-b border-b-yellow-25" : " text-richblack-50"} cursor-pointer px-4 py-2`}>
+                <p onClick={() => setActive(1)} className={`${active === 1 ? "border-b border-b-yellow-25 text-yellow-25" : " text-richblack-50"} cursor-pointer px-4 py-2`}>
                     Most Popular
                 </p>
 
-                <p onClick={() => setActive(2)} className={`${active === 2 ? "border-b border-b-yellow-25" : " text-richblack-50"} cursor-pointer px-4 py-2`}>
+                <p onClick={() => setActive(2)} className={`${active === 2 ? "border-b border-b-yellow-25 text-yellow-25" : " text-richblack-50"} cursor-pointer px-4 py-2`}>
                     New
                 </p>
             </div>
@@ -103,7 +107,7 @@ const Catalog = () => {
         </div>
 
         <div className=' mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent'>
-            <div className='Section_heading '>Frequently Bought</div>
+            <div className='section_heading '>Frequently Bought</div>
             <div className=' py-8'>
                 <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
                     {

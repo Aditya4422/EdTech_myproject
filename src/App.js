@@ -34,15 +34,15 @@ import CourseDetails from './pages/CourseDetails';
 function App() {
 
   const { user } = useSelector((state) => state.profile);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if(localStorage.getItem("token")){
-      const token = JSON.parse(localStorage.getItem("token"));
-      dispatch(getUserDetails(token, navigate));
-    }
-  })
+  // useEffect(() => {
+  //   if(localStorage.getItem("token")){
+  //     const token = JSON.parse(localStorage.getItem("token"));
+  //     dispatch(getUserDetails(token, navigate));
+  //   }
+  // }, []);
 
   return (
       <div className=" flex flex-col w-screen min-h-screen bg-richblack-900 font-inter">

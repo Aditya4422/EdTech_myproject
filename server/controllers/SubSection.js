@@ -88,7 +88,7 @@ exports.updateSubSection = async (req, res) => {
         console.log(updatedSection);
         // return the response
         return res.status(200).json({
-            succes: true,
+            success: true,
             message: 'Section and subsection are updated successfully',
             data: updatedSection,
         });
@@ -110,14 +110,14 @@ exports.deleteSubSection = async (req, res) => {
         // validate the data
         if(!subSectionId){
             return res.status(400).json({
-                succes: false,
+                success: false,
                 message: 'SubSection id is missing',
             });
         }
 
         if(!sectionId){
             return res.status(400).json({
-                succes: false,
+                success: false,
                 message: 'Section id is missing',
             });
         }

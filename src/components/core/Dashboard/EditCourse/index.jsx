@@ -4,26 +4,29 @@ import { useParams } from "react-router-dom";
 import { getFullDetailsOfCourse } from "../../../../services/operations/courseDetailAPI";
 import { setCourse, setEditCourse } from "../../../../slices/courseSlice";
 import RenderSteps from "../AddCourse/RenderSteps";
+import AddCourse from "../AddCourse";
 
 
 export default function EditCourse () {
     const dispatch = useDispatch();
     const {courseId} = useParams();
-    const {token} = useState((state) => state.auth);
+    const {token} = useSelector((state) => state.auth);
     const {course} = useSelector((state) => state.course);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        (async () => {
+        ;(async () => {
             setLoading(true);
+            // console.log("befor hitting the get Full details of course ..")
             const result = await getFullDetailsOfCourse(courseId, token);
+            // console.log("result of get fullDetails of course after hitting the api in editcourse.jsx...", result);
             if(result?.courseDetails){
                 dispatch(setEditCourse(true));
                 dispatch(setCourse(result?.courseDetails));
             }
             setLoading(false);
         })();
-    });
+    },[]);
 
     if(loading){
         return (
