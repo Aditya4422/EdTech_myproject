@@ -74,7 +74,7 @@ exports.contactUsEmail = (
     
     <body>
         <div class="container">
-            <a href="https://drive.google.com/file/d/19YTCnW7pWgPewDCIYV5MZb_15CjqgTBC/view?usp=drive_link"><img class="logo"
+            <a href="/"><img class="logo"
                     src="https://drive.google.com/file/d/19YTCnW7pWgPewDCIYV5MZb_15CjqgTBC/view?usp=drive_link" alt="StudyTech"></a>
             <div class="message">Contact Form Confirmation</div>
             <div class="body">
