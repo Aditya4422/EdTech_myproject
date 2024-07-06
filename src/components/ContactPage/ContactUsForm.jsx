@@ -14,7 +14,7 @@ const ContactUsForm = () => {
     console.log("data recieved for maiking contact api call..", data);
     try{
         setLoading(true);
-        const res = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
+        await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
         setLoading(false);
     }
     catch(error){
