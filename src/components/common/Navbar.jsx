@@ -59,7 +59,7 @@ function  Navbar(){
         
         {/* logo  */}
         <Link to="/">
-          <img src={StudyTechLogo} width={160} height={42} loading='lazy' alt="EdTech" />
+          <img src={StudyTechLogo} width={160} height={42} loading='lazy' alt="EdTech"  className='aspect-square w-[78px] rounded-full object-cover'/>
         </Link>
 
         {/* navlinks */}
