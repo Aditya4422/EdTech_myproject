@@ -31,7 +31,7 @@ exports.resetPasswordToken = async (req, res) => {
         
         console.log("Details : ", updatedDetails);
         // create url
-        const url = `https://study-tech.vercel.app/update-password/${token}`;
+        const url = `http://localhost:3000/update-password/${token}`;
         // send email containing the url
         await mailSender(email, 
                         "Password Reset Link",

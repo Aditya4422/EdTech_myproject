@@ -37,15 +37,15 @@ exports.sendOTP = async (req, res) => {
         });
         
         // let us check whether the unique otp is generated or not 
-        let result = await OTP.findOne({otp:otp});
-        while(result){
-            otp = otpGenerator(6,{
-                upperCaseAlphabets: false,
-                lowerCaseAlphabets: false,
-                specialChars: false,
-            });
-            result = await OTP.findOne({otp:otp});
-        }
+        // let result = await OTP.findOne({otp:otp});
+        // while(result){
+        //     otp = otpGenerator(6,{
+        //         upperCaseAlphabets: false,
+        //         lowerCaseAlphabets: false,
+        //         specialChars: false,
+        //     });
+        //     result = await OTP.findOne({otp:otp});
+        // }
 
         const otpPayload = {email, otp};  // create an otpPayload object to pass to DB for entry
 
@@ -54,7 +54,7 @@ exports.sendOTP = async (req, res) => {
         console.log(otpBody);
 
         // return response successful
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "OTP Sent successfully",
             otp,
@@ -101,7 +101,7 @@ exports.signUp = async (req, res) => {
         }
 
         // fetch recent otp
-        let recentOtp = await OTP.find({email}).sort({created:-1}).limit(1);
+        let recentOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
         console.log('This is the recent otp : ', recentOtp);
 
         // validate the otp
@@ -194,7 +194,7 @@ exports.login = async (req, res) => {
             };
 
             const token = jwt.sign(payload, process.env.JWT_SECRET,{
-                expiresIn: "2h",
+                expiresIn: "24h",
             });
 
             user.token = token;
@@ -228,40 +228,13 @@ exports.login = async (req, res) => {
     }
 }
 
-// exports.changePassword = async (res, res) => {
-//     // fetch data (oldPassword, newPassword, confirmNewPassword)
-//     const {email, oldPassword, newPassword, confirmNewPassword} = req.body;
-//     // validate the data
-//     if(!oldPassword || !newPassword || !confirmNewPassword){
-//         return res.status(400).json({
-//             success: false,
-//             message: 'All fields are required',
-//         });
-//     }
-
-//     const user = await User.findOne({email});
-//     if(await bcrypt.compare(oldPassword, user.password)){
-//         user.updateOne
-//     }
-//     else{
-//         return res.status(401).json({
-//             success: false,
-//             message: 'Old Password is not correct, please try again!',
-//         });
-//     }
-    
-//     // update the password in the database
-//     // send mail
-//     // return response
-// }
-
 
 exports.changePassword = async (req, res) => {
 	try {
 		// Get user data from req.user
 		const userDetails = await User.findById(req.user.id);
 
-		// Get old password, new password, and confirm new password from req.body
+		// Get old password, new password, from req.body
 		const { oldPassword, newPassword } = req.body;
 
 		// Validate old password
