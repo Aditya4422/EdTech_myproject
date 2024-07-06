@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import logo from "../../assets/Logo/Logo-Small-Light.png";
-import StudyTechLogo from '../../assets/Logo/StudyTechLogo.png';
+import StudyTechLogo from '../../assets/Logo/StudyTech.png';
 
 import { Link, matchPath } from 'react-router-dom';
 import { NavbarLinks } from '../../data/navbar-links';
@@ -59,7 +59,7 @@ function  Navbar(){
         
         {/* logo  */}
         <Link to="/">
-          <img src={StudyTechLogo} width={200} height={32} loading='lazy' alt="EdTech"  className='aspect-square w-[50px] object-cover'/>
+          <img src={StudyTechLogo} width={180} height={42} loading='lazy' alt="EdTech"  className='aspect-square w-[52px] rounded-full object-cover'/>
         </Link>
 
         {/* navlinks */}
